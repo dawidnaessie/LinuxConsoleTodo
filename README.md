@@ -35,4 +35,6 @@ Option 2: Add a new task
 
 Option 3: Delete a task by ID
 
-Option 4: Exit
+Option 4: Mark a task as done
+
+Option 5: Exit
