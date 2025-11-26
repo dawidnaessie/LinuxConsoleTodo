@@ -15,13 +15,10 @@ std::vector<Task> getTasksTxt()
     }
     while(File.peek() != EOF)
     {
-        if (File.peek() == '\n') 
-            {File.get(); continue;}
+        if (File.peek() == '\n') { File.get(); continue; }
         tasks.push_back(Task::readTask(File));
     }
-
     File.close();
-
     return tasks; 
 }
 
@@ -36,9 +33,7 @@ int saveTasksTxt(const std::vector<Task>& tasks)
     {
         task.writeTask(File);
     }
-
     File.close();
-   
     return 0;
 }
 
@@ -46,20 +41,17 @@ Task makeNewTask()
 {
     std::string t,c,d;
 
-    std::cout << "Enter a new tasks title:\n";
-    std::cout << "> ";
+    std::cout << "Enter a new task title:\n> ";
     std::getline(std::cin >> std::ws, t);
 
-    std::cout << "Enter a new tasks description:\n";
-    std::cout << "> ";
+    std::cout << "Enter a new task description:\n> ";
     std::getline(std::cin >> std::ws, c);
 
-    std::cout << "Enter the deadline:\n(in this [year-month-day hour:minute] => YYYY-MM-DD HH-MM):\n";
-    std::cout << "> ";
+    std::cout << "Enter the deadline [YYYY-MM-DD HH:MM]:\n> ";
     std::getline(std::cin >> std::ws, d);
-    auto dl = Task::parseDate(d);
 
-    return Task(t,c, false,dl);
+    auto dl = Task::parseDate(d);
+    return Task(t,c, false, dl);
 }
 
 void printTasksList(std::vector<Task>& tasks)

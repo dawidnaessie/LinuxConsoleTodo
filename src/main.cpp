@@ -10,8 +10,6 @@ void deleteTaskByNum(std::vector<Task>& tasks) {
         std::cout << "No tasks to delete.\n";
         return;
     }
-
-    // Display tasks with IDs
     std::cout << "Current tasks:\n";
     printTasksList(tasks);
 
@@ -25,15 +23,11 @@ void deleteTaskByNum(std::vector<Task>& tasks) {
     }
     tasks.erase(tasks.begin() + num);
     std::cout << "Task removed!\n";
-
 } 
 
 void displayTasks(std::vector<Task>& tasks)
 {
-    
-    std::cout << "\n====================\n";
-    std::cout << "\n";
-    
+    std::cout << "\n====================\n\n";
     if(tasks.empty())
     {
         std::cout << "No current tasks!\n";
@@ -56,7 +50,6 @@ void displayTasks(std::vector<Task>& tasks)
             << " | deadline: " << buffer
             << " |\n";
     }
-
     std::cout << "\n====================\n";
 }
 
@@ -64,31 +57,28 @@ void taskMarkAsDone(std::vector<Task>& tasks)
 {
     size_t num;
     printTasksList(tasks);
-    std::cout << "Type in the index of the task you wish to tag as finished:\n";
-    std::cout << "> ";
+    std::cout << "Type in the index of the task you wish to tag as finished:\n> ";
     std::cin >> num;
-    if(num > tasks.size()){ std::cout << "No such index\n"; return; }
+    if(num >= tasks.size()){ std::cout << "No such index\n"; return; }
     tasks[num].markDone();
-    std::cout << " Marked as done!\n";
-
+    std::cout << "Marked as done!\n";
 }
 
 int main() {
-    std::vector<Task> tasks = getTasksTxt(); // load tasks once
+    std::vector<Task> tasks = getTasksTxt();
     system("clear");
+
     while(true) {
-        std::cout << "\n==Your task manager==\n";
-        std::cout << "Options:\n";
-        std::cout << "1. Show current tasks\n";
-        std::cout << "2. Add new task\n";
-        std::cout << "3. Delete task via index\n";
-        std::cout << "4. Mark a task as finished\n";
-        std::cout << "5. Exit\n";
+        std::cout << "\n==Your task manager==\nOptions:\n"
+                  << "1. Show current tasks\n"
+                  << "2. Add new task\n"
+                  << "3. Delete task via index\n"
+                  << "4. Mark a task as finished\n"
+                  << "5. Exit\n";
 
         int op;
         std::cout << "Enter your option:\n> ";
         std::cin >> op;
-        
         system("clear");
 
         switch(op) {
@@ -116,7 +106,6 @@ int main() {
                 return -1;
         }
     }
-
     return 0;
 }
 

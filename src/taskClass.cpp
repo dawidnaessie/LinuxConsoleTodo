@@ -12,7 +12,6 @@ std::string Task::getTitle() const { return title; }
 std::string Task::getContent() const { return content; }
 bool Task::isDone() const { return done; }
 std::chrono::system_clock::time_point Task::getDeadline() const { return deadline; }
-
 void Task::markDone() { done = true; }
 
 std::chrono::system_clock::time_point Task::parseDate(const std::string& s)
@@ -26,12 +25,10 @@ std::chrono::system_clock::time_point Task::parseDate(const std::string& s)
 
 void Task::printInfo() const
 {
-    std::cout
-                << "\n| title: " << title
-                << "\n| content: " << content 
-                << "\n| status: "
-                << (done ? "finished" : "unfinished")
-                << "\n==========================\n";
+    std::cout << "\n| title: " << title
+              << "\n| content: " << content
+              << "\n| status: " << (done ? "finished" : "unfinished")
+              << "\n==========================\n";
 
     auto now = std::chrono::system_clock::now();
     auto diff = deadline - now;
@@ -58,13 +55,12 @@ Task Task::readTask(std::istream& File)
     std::getline(File, Date, ';');
     std::getline(File, Status, ';');
 
-
     if (Title.empty()) Title = "unknown";
     if (Content.empty()) Content = "unknown";
     if (Date.empty()) Date = "2025-01-01 00:00";
     if (Status.empty()) Status = "unfinished";
 
-    bool Isdone = (Status=="finished" ? true : false);
+    bool Isdone = (Status == "finished");
 
     return Task(Title, Content, Isdone, parseDate(Date));
 }
@@ -76,8 +72,7 @@ void Task::writeTask(std::ostream& File) const
 
     File << title << ";"
          << content << ";"
-         << done << ";"
-         << std::put_time(tm, "%Y-%m-%d %H:%M")
+         << std::put_time(tm, "%Y-%m-%d %H:%M") << ";"
+         << (done ? "finished" : "unfinished")
          << ";\n";
 }
-

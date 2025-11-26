@@ -1,6 +1,5 @@
 #ifndef FILEHANDLE_HPP
 #define FILEHANDLE_HPP
-
 #pragma once
 
 #include <vector>
