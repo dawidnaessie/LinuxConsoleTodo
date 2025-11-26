@@ -4,21 +4,30 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 class Task{
 private:
-    int id;
+
     std::string title;
     std::string content;
+    bool done;
+    std::chrono::system_clock::time_point deadline;
 
-    static int generateId();
 public:
+    Task(const std::string& Title,
+        const std::string& Content,
+        const bool& Done,
+        const std::chrono::system_clock::time_point& Deadline); //initialize the task
+    std::string getTitle() const;
+    std::string getContent() const;
+    bool isDone() const;
+    std::chrono::system_clock::time_point getDeadline() const;
+    void markDone();
     void printInfo() const;
-    Task(const std::string& Title, const std::string& Content); //initialize the task
-    int getId();
-    std::string getTitle();
-    std::string getContent();
     static Task readTask(std::istream& File);
     void writeTask(std::ostream& File) const;
+
+    static std::chrono::system_clock::time_point parseDate(const std::string& str);
 };
 
 #endif

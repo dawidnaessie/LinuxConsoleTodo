@@ -1,11 +1,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "taskClass.hpp"
 #include "fileHandle.hpp"
-#include <algorithm>
 
-void deleteTaskById(std::vector<Task>& tasks) {
+void deleteTaskByNum(std::vector<Task>& tasks) {
     if (tasks.empty()) {
         std::cout << "No tasks to delete.\n";
         return;
@@ -13,25 +13,18 @@ void deleteTaskById(std::vector<Task>& tasks) {
 
     // Display tasks with IDs
     std::cout << "Current tasks:\n";
-    for(const auto& task : tasks) {
-        task.printInfo();
+    printTasksList(tasks);
+
+    size_t num;
+    std::cout << "Enter the index of the task to delete: ";
+    std::cin >> num;
+    if(num >= tasks.size())
+    {
+        std::cout << "No such index!\n";
+        return;
     }
-
-    int idToDelete;
-    std::cout << "Enter the ID of the task to delete: ";
-    std::cin >> idToDelete;
-
-    // Remove task with matching ID
-    auto it = std::remove_if(tasks.begin(), tasks.end(),
-                         [idToDelete](Task& t){ return t.getId() == idToDelete; });
-
-    if (it == tasks.end()) {
-        std::cout << "No task found with ID " << idToDelete << ".\n";
-    } else {
-        tasks.erase(it, tasks.end());
-        std::cout << "Task deleted.\n";
-        saveTasksTxt(tasks);
-    }
+    tasks.erase(tasks.begin() + num);
+    std::cout << "Task removed!\n";
 
 } 
 
@@ -50,13 +43,34 @@ void displayTasks(std::vector<Task>& tasks)
 
     for(auto& task : tasks)
     {
-        std::cout << "| ID: " << task.getId() 
-                 << " | title: " << task.getTitle() 
-                 << " | content: " << task.getContent() 
-                 << " |\n";
+        std::time_t t = std::chrono::system_clock::to_time_t(task.getDeadline());
+        std::tm* tm = std::localtime(&t);
+
+        char buffer[20];
+        std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", tm);
+
+        std::cout 
+            << " | title: " << task.getTitle() 
+            << " | content: " << task.getContent() 
+            << " | status: " << (task.isDone() ? "finished" : "unfinished")
+            << " | deadline: " << buffer
+            << " |\n";
     }
 
     std::cout << "\n====================\n";
+}
+
+void taskMarkAsDone(std::vector<Task>& tasks)
+{
+    size_t num;
+    printTasksList(tasks);
+    std::cout << "Type in the index of the task you wish to tag as finished:\n";
+    std::cout << "> ";
+    std::cin >> num;
+    if(num > tasks.size()){ std::cout << "No such index\n"; return; }
+    tasks[num].markDone();
+    std::cout << " Marked as done!\n";
+
 }
 
 int main() {
@@ -67,8 +81,9 @@ int main() {
         std::cout << "Options:\n";
         std::cout << "1. Show current tasks\n";
         std::cout << "2. Add new task\n";
-        std::cout << "3. Delete task via id\n";
-        std::cout << "4. Exit\n";
+        std::cout << "3. Delete task via index\n";
+        std::cout << "4. Mark a task as finished\n";
+        std::cout << "5. Exit\n";
 
         int op;
         std::cout << "Enter your option:\n> ";
@@ -87,12 +102,18 @@ int main() {
                 break;
             }
             case 3:
-                deleteTaskById(tasks);
+                deleteTaskByNum(tasks);
+                saveTasksTxt(tasks);
                 break;
             case 4:
+                taskMarkAsDone(tasks);
+                saveTasksTxt(tasks);
+                break;
+            case 5:
                 return 0;
             default:
                 std::cout << "There is no such option!\n";
+                return -1;
         }
     }
 

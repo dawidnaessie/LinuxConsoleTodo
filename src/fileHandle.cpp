@@ -44,7 +44,7 @@ int saveTasksTxt(const std::vector<Task>& tasks)
 
 Task makeNewTask()
 {
-    std::string t,c;
+    std::string t,c,d;
 
     std::cout << "Enter a new tasks title:\n";
     std::cout << "> ";
@@ -54,6 +54,20 @@ Task makeNewTask()
     std::cout << "> ";
     std::getline(std::cin >> std::ws, c);
 
-    return Task(t,c);
+    std::cout << "Enter the deadline:\n(in this [year-month-day hour:minute] => YYYY-MM-DD HH-MM):\n";
+    std::cout << "> ";
+    std::getline(std::cin >> std::ws, d);
+    auto dl = Task::parseDate(d);
+
+    return Task(t,c, false,dl);
+}
+
+void printTasksList(std::vector<Task>& tasks)
+{
+    for (size_t i = 0; i < tasks.size(); i++)
+    {   
+        std::cout << "number: " << i;
+        tasks[i].printInfo();
+    }
 }
 

@@ -9,5 +9,6 @@
 std::vector<Task> getTasksTxt();
 int saveTasksTxt(const std::vector<Task>& tasks);
 Task makeNewTask();
+void printTasksList(std::vector<Task>& tasks);
 
 #endif
